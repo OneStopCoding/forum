@@ -5,8 +5,10 @@ import java.util.UUID
 class ProfileIn(
     val firstname: String,
     val lastname: String,
-    var location: LocationIn,
-    var socials: SocialsIn,
+    val profilePic: String,
+    val images: List<String>,
+    var location: List<String>,
+    var socials: List<String>,
     var bio: String
 )
 

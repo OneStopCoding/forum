@@ -7,23 +7,25 @@ import com.onestopcoding.forum.services.ProfileService
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.QueryMapping
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Controller
 
 @Controller
-class ProfileController(private val profileService: ProfileService) {
-
+open class ProfileController(private val profileService: ProfileService) {
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @MutationMapping
-    fun createProfile(@Argument profile: ProfileIn): Profile {
+    open fun createProfile(@Argument profile: ProfileIn): Profile {
         return profileService.createProfile(profile)
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @MutationMapping
-    fun sendDM(@Argument message: DMIn): String {
+    open fun sendDM(@Argument message: DMIn): String {
         return profileService.sendDm(message)
     }
 
     @QueryMapping
-    fun getProfile(): Profile {
+    open fun getProfile(): Profile {
         return profileService.getProfile()
     }
 }

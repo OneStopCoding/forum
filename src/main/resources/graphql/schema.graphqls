@@ -2,6 +2,8 @@ type Profile{
     firstname: String
     lastname: String
     user: User
+    profilePic: String
+    images: [String]
     location: Location
     socials: Socials
     bio: String
@@ -14,6 +16,7 @@ type DM{
     receiver: User
     title: String
     text: String
+    images: [String]
 }
 
 type Location{
@@ -84,16 +87,19 @@ input CommentIn{
 }
 
 input DMIn{
-    receiver: ID!
+    receiver: String
     title: String
     text: String!
+    images: [String]
 }
 
 input ProfileIn{
     firstname: String!
     lastname: String!
-    location: LocationIn
-    socials: SocialsIn
+    profilePic: String
+    images: [String]
+    location: [String]
+    socials: [String]
     bio: String
 }
 

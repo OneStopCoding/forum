@@ -13,5 +13,6 @@ data class DM(
     val sender: User,
     val receiver: User,
     val title: String,
-    val text: String
+    val text: String,
+    val images: List<String>
 )
