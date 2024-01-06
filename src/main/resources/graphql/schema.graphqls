@@ -1,0 +1,131 @@
+type Profile{
+    firstname: String
+    lastname: String
+    user: User
+    location: Location
+    socials: Socials
+    bio: String
+    followers: [User]
+    messages: [DM]
+}
+
+type DM{
+    sender: User
+    receiver: User
+    title: String
+    text: String
+}
+
+type Location{
+    city: String
+    provence: String
+    country: String
+}
+
+type Socials{
+    website: String
+    github: String
+    twitter: String
+    instagram: String
+    fb: String
+}
+
+type User{
+    email: ID!
+    username: String!
+    password: String!
+    roles: String
+}
+
+type Post{
+    id: ID!
+    title: String!
+    body: String!
+    images: [String]
+    author: User!
+    comments: [Comment]!
+}
+
+type Comment{
+    id: ID
+    text: String!
+    post: ID!
+    author: User!
+}
+
+type Image{
+    name: String
+    description: String
+    uri: String!
+}
+
+input ImageIn{
+    name: String
+    description: String
+    uri: String!
+}
+
+input UserInput{
+    email: String!
+    username: String!
+    password: String!
+    roles: String!
+}
+
+input PostIn{
+    title: String!
+    body: String!
+    images: [String]
+}
+
+input CommentIn{
+    text: String!
+    post: ID!
+}
+
+input DMIn{
+    receiver: ID!
+    title: String
+    text: String!
+}
+
+input ProfileIn{
+    firstname: String!
+    lastname: String!
+    location: LocationIn
+    socials: SocialsIn
+    bio: String
+}
+
+input LocationIn{
+    city: String
+    provence: String
+    country: String
+}
+
+input SocialsIn{
+    website: String
+    github: String
+    twitter: String
+    instagram: String
+    fb: String
+}
+
+type Mutation{
+    register(input: UserInput!): String!
+    login(username: String!, password: String!): String!
+    addPost(postIn: PostIn): Post!
+    addComment(commentIn: CommentIn): Post!
+    sendDM(dm: DMIn): String
+    createProfile(profile: ProfileIn): Profile
+}
+
+type Query{
+    helloWorld: String!
+    userByUsername(username: String): User
+    allUsers:[User]!
+    postsForUser(author: String!): [Post]
+    allPosts:[Post]!
+    recentPost(page: Int!, size: Int!): [Post]
+    getProfile: Profile
+}
