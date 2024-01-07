@@ -30,6 +30,12 @@ open class ProfileController(private val profileService: ProfileService) {
         return profileService.sendDm(dm)
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @MutationMapping
+    open fun readDM(@Argument read: Boolean): Boolean {
+        return profileService.readDM()
+    }
+
     @QueryMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     open fun getProfile(): Profile {

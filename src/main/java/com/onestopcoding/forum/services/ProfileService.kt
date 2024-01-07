@@ -51,6 +51,16 @@ open class ProfileService(
         return profileRepository.findProfileByUser_Email(user.getEmail())
     }
 
+    fun readDM(): Boolean{
+        val profile = getProfile()
+        for(message: DM in profile.messages){
+            message.read = true
+            println("message read")
+        }
+        profileRepository.save(profile)
+        return true
+    }
+
     fun sendDm(message: DMIn): Profile {
         val sender = userService.findByUsername(SecurityContextHolder.getContext().authentication.name)
         val receiver = userService.findByUsername(message.receiver)

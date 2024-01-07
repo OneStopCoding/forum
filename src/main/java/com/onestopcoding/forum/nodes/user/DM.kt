@@ -14,5 +14,6 @@ data class DM(
     val receiver: User,
     val title: String,
     val text: String,
-    val images: List<String>
+    val images: List<String>,
+    var read: Boolean = false
 )

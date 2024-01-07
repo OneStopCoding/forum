@@ -12,11 +12,12 @@ type Profile{
 }
 
 type DM{
-    sender: User
-    receiver: User
+    sender: User!
+    receiver: User!
     title: String
-    text: String
+    text: String!
     images: [String]
+    read: Boolean!
 }
 type City{
     name: ID!
@@ -136,6 +137,7 @@ type Mutation{
     sendDM(dm: DMIn!): Profile
     createProfile(profile: ProfileIn!): Profile!
     follow(username: String!):Profile
+    readDM(read: Boolean!): Boolean
 }
 
 type Query{
