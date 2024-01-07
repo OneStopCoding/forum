@@ -25,7 +25,13 @@ open class ProfileController(private val profileService: ProfileService) {
     }
 
     @QueryMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     open fun getProfile(): Profile {
         return profileService.getProfile()
+    }
+
+    @QueryMapping
+    open fun getProfileByUsername(@Argument username: String):Profile{
+        return profileService.getProfileByUsername(username)
     }
 }

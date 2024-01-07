@@ -24,7 +24,7 @@ class PostService(private val postRepository: PostRepository, private val userSe
     }
 
     fun findPostsByUser(username: String): List<Post> {
-        return postRepository.findByAuthor_Username(username)
+        return postRepository.findByAuthor_UsernameOrderByIdDesc(username)
     }
 
     fun getAllPosts(): List<Post> {

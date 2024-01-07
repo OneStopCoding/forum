@@ -48,6 +48,11 @@ open class ProfileService(
         return profileRepository.findProfileByUser_Email(user.getEmail())
     }
 
+    fun getProfileByUsername(username: String): Profile{
+        val user = userService.findByUsername(username)
+        return profileRepository.findProfileByUser_Email(user.getEmail())
+    }
+
     fun sendDm(message: DMIn): String {
         val sender = userService.findByUsername(SecurityContextHolder.getContext().authentication.name)
         val receiver = userService.findById(message.receiver)

@@ -18,11 +18,22 @@ type DM{
     text: String
     images: [String]
 }
+type City{
+    name: ID!
+}
+
+type Provence{
+    name: ID!
+}
+
+type Country{
+    name: ID!
+}
 
 type Location{
-    city: String
-    provence: String
-    country: String
+    city: City
+    provence: Provence
+    country: Country
 }
 
 type Socials{
@@ -134,4 +145,5 @@ type Query{
     allPosts:[Post]!
     recentPost(page: Int!, size: Int!): [Post]
     getProfile: Profile
+    getProfileByUsername(username: String!): Profile
 }
