@@ -57,7 +57,7 @@ type Post{
     body: String!
     images: [String]
     author: User!
-    comments: [Comment!]!
+    comments: [Comment]!
 }
 
 type Comment{
@@ -133,9 +133,9 @@ type Mutation{
     login(username: String!, password: String!): String!
     addPost(postIn: PostIn!): Post!
     addComment(commentIn: CommentIn!): Post!
-    sendDM(dm: DMIn!): String
+    sendDM(dm: DMIn!): Profile
     createProfile(profile: ProfileIn!): Profile!
-    follow(username: String!):Profile!
+    follow(username: String!):Profile
 }
 
 type Query{

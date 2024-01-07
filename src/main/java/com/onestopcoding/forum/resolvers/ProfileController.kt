@@ -26,8 +26,8 @@ open class ProfileController(private val profileService: ProfileService) {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @MutationMapping
-    open fun sendDM(@Argument message: DMIn): String {
-        return profileService.sendDm(message)
+    open fun sendDM(@Argument dm: DMIn): Profile {
+        return profileService.sendDm(dm)
     }
 
     @QueryMapping

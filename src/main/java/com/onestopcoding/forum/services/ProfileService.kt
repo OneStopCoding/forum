@@ -51,16 +51,14 @@ open class ProfileService(
         return profileRepository.findProfileByUser_Email(user.getEmail())
     }
 
-    fun sendDm(message: DMIn): String {
+    fun sendDm(message: DMIn): Profile {
         val sender = userService.findByUsername(SecurityContextHolder.getContext().authentication.name)
-        val receiver = userService.findById(message.receiver)
+        val receiver = userService.findByUsername(message.receiver)
         val profile: Profile = profileRepository.findProfileByUser_Email(receiver.getEmail())
         profile.messages =
             profile.messages.plus(DM(UUID.randomUUID(), sender, receiver, message.title, message.text, message.images))
-        val updated = profileRepository.save(profile)
-        if (updated.messages.size > profile.messages.size)
-            return "Message successfully send"
-        return "Failed to send"
+        return profileRepository.save(profile)
+
     }
 
     fun follow(username: String):Profile{
