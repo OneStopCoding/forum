@@ -1,4 +1,4 @@
-package com.onestopcoding.forum.nodes
+package com.onestopcoding.forum.nodes.user
 
 import org.springframework.data.neo4j.core.schema.GeneratedValue
 import org.springframework.data.neo4j.core.schema.Id

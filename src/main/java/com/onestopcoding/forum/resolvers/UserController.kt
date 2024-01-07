@@ -1,6 +1,6 @@
 package com.onestopcoding.forum.resolvers
 
-import com.onestopcoding.forum.nodes.User
+import com.onestopcoding.forum.nodes.user.User
 import com.onestopcoding.forum.services.UserService
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping

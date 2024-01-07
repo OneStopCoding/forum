@@ -1,5 +1,6 @@
-package com.onestopcoding.forum.nodes
+package com.onestopcoding.forum.nodes.user
 
+import com.onestopcoding.forum.nodes.location.Location
 import org.springframework.data.neo4j.core.schema.GeneratedValue
 import org.springframework.data.neo4j.core.schema.Id
 import org.springframework.data.neo4j.core.schema.Node

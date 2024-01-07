@@ -2,11 +2,14 @@ package com.onestopcoding.forum.services
 
 import com.onestopcoding.forum.models.DMIn
 import com.onestopcoding.forum.models.ProfileIn
-import com.onestopcoding.forum.nodes.Socials
-import com.onestopcoding.forum.nodes.DM
-import com.onestopcoding.forum.nodes.Location
-import com.onestopcoding.forum.nodes.Profile
-import com.onestopcoding.forum.repositories.LocationRepository
+import com.onestopcoding.forum.nodes.*
+import com.onestopcoding.forum.nodes.location.City
+import com.onestopcoding.forum.nodes.location.Country
+import com.onestopcoding.forum.nodes.location.Location
+import com.onestopcoding.forum.nodes.location.Provence
+import com.onestopcoding.forum.nodes.user.DM
+import com.onestopcoding.forum.nodes.user.Profile
+import com.onestopcoding.forum.nodes.user.Socials
 import com.onestopcoding.forum.repositories.ProfileRepository
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
@@ -14,15 +17,20 @@ import java.util.*
 
 @Service
 open class ProfileService(
-    private val profileRepository: ProfileRepository, private val locationRepository: LocationRepository,
+    private val profileRepository: ProfileRepository, private val locationService: LocationService,
     private val userService: UserService,
 ) {
 
     fun createProfile(profile: ProfileIn): Profile {
         val user = userService.findByUsername(SecurityContextHolder.getContext().authentication.name)
-        val location = locationRepository.save(
-            Location(UUID.randomUUID(), profile.location[0], profile.location[1], profile.location[2])
-        )
+        var location: Location? = null
+        location = if (profile.location[2] === "België"){
+            locationService.getLocationByCity(profile.location[0])
+        }else {
+            locationService.save(
+                Location(UUID.randomUUID(), City( profile.location[0]), Provence( profile.location[1]), Country(profile.location[2]))
+            )
+        }
         val socials = Socials(
             UUID.randomUUID(), profile.socials[0], profile.socials[1], profile.socials[2],
             profile.socials[3], profile.socials[4]
@@ -37,14 +45,15 @@ open class ProfileService(
 
     fun getProfile(): Profile {
         val user = userService.findByUsername(SecurityContextHolder.getContext().authentication.name)
-        return profileRepository.findProfileByUser(user)
+        return profileRepository.findProfileByUser_Email(user.getEmail())
     }
 
     fun sendDm(message: DMIn): String {
         val sender = userService.findByUsername(SecurityContextHolder.getContext().authentication.name)
         val receiver = userService.findById(message.receiver)
-        val profile: Profile = profileRepository.findProfileByUser(receiver)
-        profile.messages = profile.messages.plus(DM(UUID.randomUUID(), sender, receiver, message.title, message.text, message.images))
+        val profile: Profile = profileRepository.findProfileByUser_Email(receiver.getEmail())
+        profile.messages =
+            profile.messages.plus(DM(UUID.randomUUID(), sender, receiver, message.title, message.text, message.images))
         val updated = profileRepository.save(profile)
         if (updated.messages.size > profile.messages.size)
             return "Message successfully send"

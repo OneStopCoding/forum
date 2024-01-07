@@ -2,7 +2,7 @@ package com.onestopcoding.forum.resolvers
 
 import com.onestopcoding.forum.models.DMIn
 import com.onestopcoding.forum.models.ProfileIn
-import com.onestopcoding.forum.nodes.Profile
+import com.onestopcoding.forum.nodes.user.Profile
 import com.onestopcoding.forum.services.ProfileService
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping

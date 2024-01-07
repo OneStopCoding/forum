@@ -1,5 +1,6 @@
-package com.onestopcoding.forum.nodes
+package com.onestopcoding.forum.nodes.post
 
+import com.onestopcoding.forum.nodes.user.User
 import org.springframework.data.neo4j.core.schema.GeneratedValue
 import org.springframework.data.neo4j.core.schema.Id
 import org.springframework.data.neo4j.core.schema.Node
@@ -19,7 +20,7 @@ data class Post(
     @Relationship(type = "HAS_NONE_OR_MORE", direction = Relationship.Direction.OUTGOING)
     val comments: MutableCollection<Comment> = mutableListOf()
 ){
-    fun addComment(comment: Comment):Post{
+    fun addComment(comment: Comment): Post {
         comments.add(comment)
         return this
     }

@@ -2,9 +2,8 @@ package com.onestopcoding.forum.resolvers
 
 import com.onestopcoding.forum.models.CommentIn
 import com.onestopcoding.forum.models.PostIn
-import com.onestopcoding.forum.nodes.Post
+import com.onestopcoding.forum.nodes.post.Post
 import com.onestopcoding.forum.services.PostService
-import org.springframework.context.annotation.Lazy
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.QueryMapping

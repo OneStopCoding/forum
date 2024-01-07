@@ -2,8 +2,8 @@ package com.onestopcoding.forum.services
 
 import com.onestopcoding.forum.models.CommentIn
 import com.onestopcoding.forum.models.PostIn
-import com.onestopcoding.forum.nodes.Comment
-import com.onestopcoding.forum.nodes.Post
+import com.onestopcoding.forum.nodes.post.Comment
+import com.onestopcoding.forum.nodes.post.Post
 import com.onestopcoding.forum.repositories.PostRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.security.core.context.SecurityContextHolder

@@ -1,6 +1,6 @@
 package com.onestopcoding.forum.repositories
 
-import com.onestopcoding.forum.nodes.Post
+import com.onestopcoding.forum.nodes.post.Post
 import org.springframework.data.neo4j.repository.Neo4jRepository
 import org.springframework.stereotype.Repository
 import java.util.*

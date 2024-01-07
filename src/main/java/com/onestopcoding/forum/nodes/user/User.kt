@@ -1,4 +1,4 @@
-package com.onestopcoding.forum.nodes
+package com.onestopcoding.forum.nodes.user
 import org.springframework.data.neo4j.core.schema.Id
 import org.springframework.data.neo4j.core.schema.Node
 
@@ -14,6 +14,7 @@ data class User(
     private val isCredentialsNonExpired: Boolean = true,
     private val isEnabled: Boolean = true
 ) {
+    fun getEmail(): String{return email}
     fun getUsername(): String{return username}
     fun getPassword(): String{return password}
     fun getRoles():String{return roles}

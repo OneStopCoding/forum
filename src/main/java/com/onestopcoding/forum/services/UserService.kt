@@ -1,6 +1,6 @@
 package com.onestopcoding.forum.services
 
-import com.onestopcoding.forum.nodes.User
+import com.onestopcoding.forum.nodes.user.User
 import com.onestopcoding.forum.repositories.UserRepository
 import com.onestopcoding.forum.security.JwtUtil
 import com.onestopcoding.forum.security.RSAKeyProperties
@@ -34,7 +34,7 @@ class UserService(private val userRepository: UserRepository, private val rsaKey
         return userRepository.findByUsername(username)
     }
 
-    fun findById(id: String):User{
+    fun findById(id: String): User {
         return userRepository.findById(id).orElseThrow { NoSuchElementException("user with id: $id could not be found!") }
     }
 
