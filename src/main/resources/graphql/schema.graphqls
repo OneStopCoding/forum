@@ -1,7 +1,7 @@
 type Profile{
     firstname: String
     lastname: String
-    user: User
+    user: User!
     profilePic: String
     images: [String]
     location: Location
@@ -31,9 +31,9 @@ type Country{
 }
 
 type Location{
-    city: City
-    provence: Provence
-    country: Country
+    city: City!
+    provence: Provence!
+    country: Country!
 }
 
 type Socials{
@@ -57,7 +57,7 @@ type Post{
     body: String!
     images: [String]
     author: User!
-    comments: [Comment]!
+    comments: [Comment!]!
 }
 
 type Comment{
@@ -98,7 +98,7 @@ input CommentIn{
 }
 
 input DMIn{
-    receiver: String
+    receiver: String!
     title: String
     text: String!
     images: [String]
@@ -131,15 +131,16 @@ input SocialsIn{
 type Mutation{
     register(input: UserInput!): String!
     login(username: String!, password: String!): String!
-    addPost(postIn: PostIn): Post!
-    addComment(commentIn: CommentIn): Post!
-    sendDM(dm: DMIn): String
-    createProfile(profile: ProfileIn): Profile
+    addPost(postIn: PostIn!): Post!
+    addComment(commentIn: CommentIn!): Post!
+    sendDM(dm: DMIn!): String
+    createProfile(profile: ProfileIn!): Profile!
+    follow(username: String!):Profile!
 }
 
 type Query{
     helloWorld: String!
-    userByUsername(username: String): User
+    userByUsername(username: String!): User
     allUsers:[User]!
     postsForUser(author: String!): [Post]
     allPosts:[Post]!

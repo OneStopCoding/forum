@@ -23,7 +23,11 @@ data class Profile(
     val socials: Socials,
     val bio: String,
     @Relationship(type = "HAS_FOLLOWERS", direction = Relationship.Direction.INCOMING)
-    val followers: List<User>,
+    var followers: List<User>,
     @Relationship(type = "HAS_MESSAGES", direction = Relationship.Direction.INCOMING)
     var messages: List<DM>
-)
+){
+    fun addFollower(user: User): List<User> {
+        return followers.plus(user)
+    }
+}

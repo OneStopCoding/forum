@@ -2,7 +2,6 @@ package com.onestopcoding.forum.services
 
 import com.onestopcoding.forum.models.DMIn
 import com.onestopcoding.forum.models.ProfileIn
-import com.onestopcoding.forum.nodes.*
 import com.onestopcoding.forum.nodes.location.City
 import com.onestopcoding.forum.nodes.location.Country
 import com.onestopcoding.forum.nodes.location.Location
@@ -23,8 +22,7 @@ open class ProfileService(
 
     fun createProfile(profile: ProfileIn): Profile {
         val user = userService.findByUsername(SecurityContextHolder.getContext().authentication.name)
-        var location: Location? = null
-        location = if (profile.location[2] === "België"){
+        val location: Location = if (profile.location[2] === "België"){
             locationService.getLocationByCity(profile.location[0])
         }else {
             locationService.save(
@@ -63,5 +61,14 @@ open class ProfileService(
         if (updated.messages.size > profile.messages.size)
             return "Message successfully send"
         return "Failed to send"
+    }
+
+    fun follow(username: String):Profile{
+        val user = userService.findByUsername(username)
+        val follower =  userService.findByUsername(SecurityContextHolder.getContext().authentication.name)
+        val profile = profileRepository.findProfileByUser_Email(user.getEmail())
+        if(!profile.followers.contains(follower))
+        profile.followers = profile.addFollower(follower)
+        return profileRepository.save(profile)
     }
 }

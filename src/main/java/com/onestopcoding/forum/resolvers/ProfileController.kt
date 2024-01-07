@@ -20,6 +20,12 @@ open class ProfileController(private val profileService: ProfileService) {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @MutationMapping
+    open fun follow(@Argument username: String): Profile {
+        return profileService.follow(username)
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @MutationMapping
     open fun sendDM(@Argument message: DMIn): String {
         return profileService.sendDm(message)
     }
