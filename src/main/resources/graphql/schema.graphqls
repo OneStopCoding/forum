@@ -12,6 +12,7 @@ type Profile{
 }
 
 type DM{
+    id: ID!
     sender: User!
     receiver: User!
     title: String
@@ -58,17 +59,20 @@ type Post{
     body: String!
     images: [String]
     author: User!
-    comments: [Comment]!
+    comments: [Comment!]!
+    Likes: [User!]!
 }
 
 type Comment{
-    id: ID
+    id: ID!
     text: String!
     post: ID!
     author: User!
+    likes: [User!]!
 }
 
 type Image{
+    id: ID!
     name: String
     description: String
     uri: String!
@@ -137,7 +141,13 @@ type Mutation{
     sendDM(dm: DMIn!): Profile
     createProfile(profile: ProfileIn!): Profile!
     follow(username: String!):Profile
-    readDM(read: Boolean!): Boolean
+    deleteDM(id: ID!): Boolean!
+    deleteComment(id: ID!): Boolean!
+    deletePost(id: ID!): Boolean!
+    deleteUser(id: ID!):[User]!
+    unFollow(username: String!): Profile!
+    like(id: ID!): Post!
+    unLike(id: ID!): Post!
 }
 
 type Query{
@@ -149,4 +159,6 @@ type Query{
     recentPost(page: Int!, size: Int!): [Post]
     getProfile: Profile
     getProfileByUsername(username: String!): Profile
+    getDM(title: String!):DM!
+    getDmForUser: [DM!]
 }

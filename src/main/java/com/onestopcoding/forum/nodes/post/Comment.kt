@@ -14,7 +14,8 @@ data class Comment (
     val id: UUID,
     var text: String,
     @Relationship(type = "BY", direction = Relationship.Direction.INCOMING)
-    val author: User
+    val author: User,
+    @Relationship(type = "LIKES", direction = Relationship.Direction.INCOMING)
+    var likes:List<User>,
 
-){
-}
+)

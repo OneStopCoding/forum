@@ -16,6 +16,12 @@ open class UserController(private val userService: UserService) {
         return userService.register(input)
     }
 
+    @MutationMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    open fun deleteUser(@Argument id: String): List<User> {
+        return userService.deleteUser(id)
+    }
+
     @QueryMapping
     fun helloWorld():String{
         return "Hello World!"

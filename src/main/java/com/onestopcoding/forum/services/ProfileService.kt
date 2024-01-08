@@ -9,24 +9,30 @@ import com.onestopcoding.forum.nodes.location.Provence
 import com.onestopcoding.forum.nodes.user.DM
 import com.onestopcoding.forum.nodes.user.Profile
 import com.onestopcoding.forum.nodes.user.Socials
+import com.onestopcoding.forum.repositories.DMRepository
 import com.onestopcoding.forum.repositories.ProfileRepository
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.util.*
+import kotlin.collections.ArrayList
 
 @Service
 open class ProfileService(
     private val profileRepository: ProfileRepository, private val locationService: LocationService,
-    private val userService: UserService,
+    private val userService: UserService, private val dmRepository: DMRepository
 ) {
 
     fun createProfile(profile: ProfileIn): Profile {
-        val user = userService.findByUsername(SecurityContextHolder.getContext().authentication.name)
-        val location: Location = if (profile.location[2] === "België"){
+        val user = userService.getLoggedInUser()
+        val location: Location = if (profile.location[2] === "België") {
             locationService.getLocationByCity(profile.location[0])
-        }else {
+        } else {
             locationService.save(
-                Location(UUID.randomUUID(), City( profile.location[0]), Provence( profile.location[1]), Country(profile.location[2]))
+                Location(
+                    UUID.randomUUID(),
+                    City(profile.location[0]),
+                    Provence(profile.location[1]),
+                    Country(profile.location[2])
+                )
             )
         }
         val socials = Socials(
@@ -42,27 +48,41 @@ open class ProfileService(
     }
 
     fun getProfile(): Profile {
-        val user = userService.findByUsername(SecurityContextHolder.getContext().authentication.name)
+        val user = userService.getLoggedInUser()
         return profileRepository.findProfileByUser_Email(user.getEmail())
     }
 
-    fun getProfileByUsername(username: String): Profile{
-        val user = userService.findByUsername(username)
-        return profileRepository.findProfileByUser_Email(user.getEmail())
+    fun getProfileByUsername(username: String): Profile {
+        return profileRepository.findProfileByUser_Username(username)
     }
 
-    fun readDM(): Boolean{
-        val profile = getProfile()
-        for(message: DM in profile.messages){
-            message.read = true
-            println("message read")
-        }
-        profileRepository.save(profile)
+    private fun readDM(title: String): Boolean {
+        val dm = dmRepository.findDMByTitle(title)
+        dm.read = true
+        dmRepository.save(dm)
         return true
     }
 
+    fun deleteDM(id: UUID): Boolean {
+        dmRepository.deleteById(id)
+        return true
+
+    }
+
+
+    fun getMessages(): List<DM> {
+        val profile = getProfile()
+        return profile.messages.reversed()
+    }
+
+    fun getMessage(title: String): DM {
+        readDM(title)
+        return dmRepository.findDMByTitle(title)
+    }
+
+
     fun sendDm(message: DMIn): Profile {
-        val sender = userService.findByUsername(SecurityContextHolder.getContext().authentication.name)
+        val sender = userService.getLoggedInUser()
         val receiver = userService.findByUsername(message.receiver)
         val profile: Profile = profileRepository.findProfileByUser_Email(receiver.getEmail())
         profile.messages =
@@ -71,12 +91,20 @@ open class ProfileService(
 
     }
 
-    fun follow(username: String):Profile{
-        val user = userService.findByUsername(username)
-        val follower =  userService.findByUsername(SecurityContextHolder.getContext().authentication.name)
-        val profile = profileRepository.findProfileByUser_Email(user.getEmail())
-        if(!profile.followers.contains(follower))
-        profile.followers = profile.addFollower(follower)
+    fun follow(username: String): Profile {
+        val follower = userService.getLoggedInUser()
+        val profile = profileRepository.findProfileByUser_Username(username)
+        if (!profile.followers.contains(follower))
+            profile.followers = profile.addFollower(follower)
+        return profileRepository.save(profile)
+    }
+
+    fun unFollow(username: String): Profile {
+        val profile = getProfileByUsername(username)
+        val user = userService.getLoggedInUser()
+        val followers = ArrayList(profile.followers)
+        followers.remove(user)
+        profile.followers = followers
         return profileRepository.save(profile)
     }
 }

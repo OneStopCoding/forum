@@ -9,6 +9,7 @@ import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.QueryMapping
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Controller
+import java.util.UUID
 
 @Controller
 open class PostController( private val postService: PostService) {
@@ -23,6 +24,31 @@ open class PostController( private val postService: PostService) {
     open fun addComment(@Argument commentIn: CommentIn): Post {
         return postService.addComment(commentIn)
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @MutationMapping
+    open fun deleteComment(@Argument id: UUID): Boolean{
+        return postService.deleteCommentById(id)
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @MutationMapping
+    open fun like(@Argument id: UUID):Post{
+        return postService.like(id)
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @MutationMapping
+    open fun unLike(@Argument id: UUID):Post{
+        return postService.like(id)
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @MutationMapping
+    open fun deletePost(@Argument id: UUID):Boolean{
+        return postService.deletePost(id)
+    }
+
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @QueryMapping
     open fun postsForUser(@Argument author: String): List<Post>{

@@ -5,6 +5,7 @@ import com.onestopcoding.forum.repositories.UserRepository
 import com.onestopcoding.forum.security.JwtUtil
 import com.onestopcoding.forum.security.RSAKeyProperties
 import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -16,6 +17,15 @@ class UserService(private val userRepository: UserRepository, private val rsaKey
         user.setPassword(passwordEncoder.encode(user.getPassword()))
         val registeredUser = userRepository.save(user)
         return  login(registeredUser.getUsername(), passwordString)
+    }
+
+    fun deleteUser(email: String):List<User>{
+        userRepository.deleteById(email)
+        return userRepository.findAll()
+    }
+
+    fun getLoggedInUser():User{
+        return findByUsername(SecurityContextHolder.getContext().authentication.name)
     }
 
     fun login(username: String, password: String): String {
@@ -39,7 +49,7 @@ class UserService(private val userRepository: UserRepository, private val rsaKey
     }
 
     fun findAll ():List<User>{
-        return userRepository.findAll();
+        return userRepository.findAll()
     }
 
 }
