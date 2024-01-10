@@ -23,28 +23,37 @@ open class ProfileService(
 
     fun createProfile(profile: ProfileIn): Profile {
         val user = userService.getLoggedInUser()
-        val location: Location = if (profile.location[2] === "België") {
-            locationService.getLocationByCity(profile.location[0])
-        } else {
-            locationService.save(
-                Location(
+        val profileExists = profileRepository.findProfileByUser_Email(user.getEmail())
+        if (profileExists.user !== user) {
+            val location: Location =
+                locationService.save(Location(
+                        UUID.randomUUID(),
+                        City(profile.location[0]),
+                        Provence(profile.location[1]),
+                        Country(profile.location[2])
+                    )
+                )
+            val socials = Socials(
+                UUID.randomUUID(), profile.socials[0], profile.socials[1], profile.socials[2],
+                profile.socials[3], profile.socials[4]
+            )
+            return profileRepository.save(
+                Profile(
                     UUID.randomUUID(),
-                    City(profile.location[0]),
-                    Provence(profile.location[1]),
-                    Country(profile.location[2])
+                    profile.firstname,
+                    profile.lastname,
+                    user,
+                    profile.profilePic,
+                    profile.images,
+                    location,
+                    socials,
+                    profileExists.bio,
+                    mutableListOf(),
+                    mutableListOf()
                 )
             )
         }
-        val socials = Socials(
-            UUID.randomUUID(), profile.socials[0], profile.socials[1], profile.socials[2],
-            profile.socials[3], profile.socials[4]
-        )
-        return profileRepository.save(
-            Profile(
-                UUID.randomUUID(), profile.firstname, profile.lastname, user, profile.profilePic, profile.images,
-                location, socials, profile.bio, mutableListOf(), mutableListOf()
-            )
-        )
+        return profileExists
     }
 
     fun getProfile(): Profile {
@@ -97,6 +106,10 @@ open class ProfileService(
         if (!profile.followers.contains(follower))
             profile.followers = profile.addFollower(follower)
         return profileRepository.save(profile)
+    }
+
+    fun getAll():List<Profile>{
+        return profileRepository.findAll()
     }
 
     fun unFollow(username: String): Profile {

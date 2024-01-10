@@ -13,15 +13,20 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 @Service
-class PostService(private val postRepository: PostRepository, private val userService: UserService,
-                  private val commentRepository: CommentRepository
+class PostService(
+    private val postRepository: PostRepository, private val userService: UserService,
+    private val commentRepository: CommentRepository
 ) {
 
     fun addPost(postIn: PostIn): Post {
         val author = userService.findByUsername(SecurityContextHolder.getContext().authentication.name)
 
-        return postRepository.save(Post(UUID.randomUUID(), postIn.title, postIn.body, postIn.images,
-            author, mutableListOf(), mutableListOf()))
+        return postRepository.save(
+            Post(
+                UUID.randomUUID(), postIn.title, postIn.body, postIn.images,
+                author, mutableListOf(), mutableListOf(), mutableListOf()
+            )
+        )
     }
 
     private fun findById(id: UUID): Post {
@@ -36,11 +41,11 @@ class PostService(private val postRepository: PostRepository, private val userSe
         return postRepository.findAll()
     }
 
-    fun recentPosts(size: Int, page: Int): List<Post>{
-        return  postRepository.findAll(PageRequest.of(page, size)).content
+    fun recentPosts(size: Int, page: Int): List<Post> {
+        return postRepository.findAll(PageRequest.of(page, size)).content
     }
 
-    fun deletePost(id: UUID):Boolean{
+    fun deletePost(id: UUID): Boolean {
         postRepository.deleteById(id)
         return true
     }
@@ -57,15 +62,34 @@ class PostService(private val postRepository: PostRepository, private val userSe
         return true
     }
 
-    fun like(id: UUID): Post{
+    fun like(id: UUID): Post {
         val post = postRepository.findById(id).get()
         val likes = ArrayList(post.likes)
+        val disLikes = ArrayList(post.disLikes)
         val user = userService.getLoggedInUser()
-        if (!likes.contains(user))
+        if (disLikes.contains(user)) {
+            disLikes.remove(user)
+            post.disLikes = disLikes
+        } else if (!likes.contains(user)) {
             likes.add(user)
-        else
-            likes.remove(user)
-        post.likes = likes
+            post.likes = likes
+        }
         return postRepository.save(post)
     }
- }
+
+    fun disLike(id: UUID): Post {
+        val post = postRepository.findById(id).get()
+        val likes = ArrayList(post.likes)
+        val disLikes = ArrayList(post.disLikes)
+        val user = userService.getLoggedInUser()
+        if (likes.contains(user)) {
+            likes.remove(user)
+            post.likes = likes
+        } else if (!disLikes.contains(user)) {
+            disLikes.add(user)
+            post.disLikes = disLikes
+
+        }
+        return postRepository.save(post)
+    }
+}

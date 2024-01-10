@@ -19,7 +19,7 @@ class LocationService(private val locationRepository: LocationRepository) {
         return locationRepository.saveAll(locations)
     }
 
-    //@PostConstruct
+    /*@PostConstruct
     fun createBelgiumLocations() {
         locationRepository.saveAll(listOf(
             Location(UUID.randomUUID(), City("Brussel"), Provence("Brussel-Hoofdstad"), Country("België")),
@@ -160,7 +160,7 @@ class LocationService(private val locationRepository: LocationRepository) {
             Location(UUID.randomUUID(), City("Waregem"), Provence("West-Vlaanderen"), Country("België")),
             Location(UUID.randomUUID(), City("Wervik"), Provence("West-Vlaanderen"), Country("België"))
         ))
-    }
+    }*/
     
     fun getLocationsForCountry(country: String):List<Location>{
         return locationRepository.getLocationsByCountry_Name(country)

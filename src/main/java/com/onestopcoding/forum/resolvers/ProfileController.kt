@@ -37,6 +37,11 @@ open class ProfileController(private val profileService: ProfileService) {
         return profileService.follow(username)
     }
 
+    @QueryMapping
+    open fun allProfile(): List<Profile> {
+        return profileService.getAll()
+    }
+
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @MutationMapping
     open fun unFollow(@Argument username: String): Profile {

@@ -39,8 +39,8 @@ open class PostController( private val postService: PostService) {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @MutationMapping
-    open fun unLike(@Argument id: UUID):Post{
-        return postService.like(id)
+    open fun dislike(@Argument id: UUID):Post{
+        return postService.disLike(id)
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")

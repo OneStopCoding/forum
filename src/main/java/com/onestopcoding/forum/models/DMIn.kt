@@ -5,5 +5,4 @@ class DMIn(
     val title: String,
     val text: String,
     val images: List<String>
-) {
-}
+)
