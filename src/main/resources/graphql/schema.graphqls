@@ -1,4 +1,5 @@
 type Profile{
+    id: ID!
     firstname: String
     lastname: String
     user: User!
@@ -34,7 +35,7 @@ type Country{
 
 type Location{
     city: City!
-    provence: Provence!
+    provence: Provence
     country: Country!
 }
 
@@ -110,6 +111,7 @@ input DMIn{
 }
 
 input ProfileIn{
+    id: ID!
     firstname: String!
     lastname: String!
     profilePic: String
@@ -160,6 +162,7 @@ type Query{
     allProfile:[Profile!]!
     getProfile: Profile!
     getProfileByUsername(username: String!): Profile
+    profileById(id: ID!): Profile
     getDM(title: String!):DM!
     getDmForUser: [DM!]
     allLocations: [Location!]!

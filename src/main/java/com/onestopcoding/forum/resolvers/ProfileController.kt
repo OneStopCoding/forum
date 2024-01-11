@@ -38,6 +38,11 @@ open class ProfileController(private val profileService: ProfileService) {
     }
 
     @QueryMapping
+    open fun profileById(@Argument id: UUID):Profile{
+        return profileService.getProfileById(id)
+    }
+
+    @QueryMapping
     open fun allProfile(): List<Profile> {
         return profileService.getAll()
     }

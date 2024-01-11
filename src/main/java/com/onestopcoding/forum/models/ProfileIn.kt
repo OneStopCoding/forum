@@ -3,6 +3,7 @@ package com.onestopcoding.forum.models
 import java.util.UUID
 
 class ProfileIn(
+    val id: UUID,
     val firstname: String,
     val lastname: String,
     val profilePic: String,

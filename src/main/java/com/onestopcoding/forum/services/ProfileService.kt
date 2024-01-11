@@ -27,32 +27,30 @@ open class ProfileService(
             UUID.randomUUID(), profile.socials[0], profile.socials[1], profile.socials[2],
             profile.socials[3], profile.socials[4]
         )
-        val location = Location(
-            UUID.randomUUID(),
-            City(profile.location[0]),
-            Province(profile.location[1]),
-            Country(profile.location[2])
-        )
+        var location = locationService.getLocationByCityInCountry(profile.location[0], profile.location[2])
+        if (location.city.name === "")
+            location = Location(
+                UUID.randomUUID(),
+                City(profile.location[0]),
+                Province(profile.location[1]),
+                Country(profile.location[2])
+            )
 
-       /* val profileExists = profileRepository.findProfileByUser_Email(user.getEmail())
+        val profileExists = profileRepository.findProfileByUser_Email(user.getEmail())
         if (profileExists.user.getEmail() === user.getEmail()) {
             profileExists.firstname = profile.firstname
             profileExists.lastname = profile.lastname
             profileExists.profilePic = profile.profilePic
             profileExists.images = ArrayList(profileExists.images).plus(profile.images)
-            if (profileExists.location.city.name !== profile.location[0] ||
-                profileExists.location.country.name !== profile.location[2]
-            ) {
-                profileExists.location = location
-            }
+            profileExists.location = location
             profileExists.socials = socials
             profileExists.bio = profile.bio
             return profileRepository.save(
                 profileExists
             )
-        } else {*/
+        } else {
             val created = Profile(
-                UUID.randomUUID(),
+                profile.id,
                 profile.firstname,
                 profile.lastname,
                 user,
@@ -65,7 +63,11 @@ open class ProfileService(
                 mutableListOf()
             )
             return profileRepository.save(created)
-     //   }
+        }
+    }
+
+    fun getProfileById(id: UUID): Profile {
+        return profileRepository.findById(id).orElse(null)
     }
 
     fun getProfile(): Profile {

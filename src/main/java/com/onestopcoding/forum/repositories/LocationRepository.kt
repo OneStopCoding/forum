@@ -12,4 +12,6 @@ interface LocationRepository: Neo4jRepository<Location, UUID> {
     fun getLocationsByCity_Name(cityName: String): List<Location>
 
     fun getLocationsByProvince_Name(provinceName: String):List<Location>
+
+    fun getLocationByCountry_NameAndCity_Name(countryName: String, cityName: String):List<Location>
 }

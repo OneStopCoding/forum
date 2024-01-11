@@ -72,6 +72,9 @@ class LocationService(private val locationRepository: LocationRepository) {
         val locations = getAll()
         return getCitiesArray(locations)
     }
+    fun getLocationByCityInCountry(city: String, country: String):Location{
+        return locationRepository.getLocationByCountry_NameAndCity_Name(country, city)[0]
+    }
 
     /*   @PostConstruct
        fun createNlLocations() {
