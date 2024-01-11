@@ -21,7 +21,8 @@ data class Post(
     val comments: MutableCollection<Comment> = mutableListOf(),
     @Relationship(type = "LIKES", direction = Relationship.Direction.INCOMING)
     var likes:List<User> = mutableListOf(),
-    var disLikes:List<User> = mutableListOf()
+    @Relationship(type = "DISLIKES", direction = Relationship.Direction.INCOMING)
+    var dislikes:List<User> = mutableListOf()
 ){
     fun addComment(comment: Comment): Post {
         comments.add(comment)

@@ -12,16 +12,16 @@ data class Profile(
     @GeneratedValue(GeneratedValue.UUIDGenerator::class)
     @Id
     val id: UUID,
-    val firstname: String,
-    val lastname: String,
+    var firstname: String,
+    var lastname: String,
     @Relationship(type = "DETAILS_OF", direction = Relationship.Direction.OUTGOING)
     val user: User,
-    val profilePic: String,
-    val images: List<String>,
+    var profilePic: String,
+    var images: List<String>,
     @Relationship(type = "IS_FROM", direction = Relationship.Direction.OUTGOING)
-    val location: Location,
-    val socials: Socials,
-    val bio: String,
+    var location: Location,
+    var socials: Socials,
+    var bio: String,
     @Relationship(type = "HAS_FOLLOWERS", direction = Relationship.Direction.INCOMING)
     var followers: List<User>,
     @Relationship(type = "HAS_MESSAGES", direction = Relationship.Direction.INCOMING)

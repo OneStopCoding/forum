@@ -31,7 +31,7 @@ object JwtUtil {
         .verifyWith(getSecret(signedSecret))
         .build()
         .parseSignedClaims(token)
-        .payload;
+        .payload
 }
 
 private fun getSecret(signedSecret: String): SecretKey = Keys.hmacShaKeyFor(signedSecret.toByteArray())

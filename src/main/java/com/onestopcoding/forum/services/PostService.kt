@@ -53,7 +53,7 @@ class PostService(
     fun addComment(commentIn: CommentIn): Post {
         val user = userService.findByUsername(SecurityContextHolder.getContext().authentication.name)
         val post = findById(commentIn.post)
-        post.addComment(Comment(UUID.randomUUID(), commentIn.text, user, mutableListOf()))
+        post.addComment(Comment(UUID.randomUUID(), commentIn.text, user))
         return postRepository.save(post)
     }
 
@@ -65,31 +65,36 @@ class PostService(
     fun like(id: UUID): Post {
         val post = postRepository.findById(id).get()
         val likes = ArrayList(post.likes)
-        val disLikes = ArrayList(post.disLikes)
+        val disLikes = ArrayList(post.dislikes)
         val user = userService.getLoggedInUser()
         if (disLikes.contains(user)) {
             disLikes.remove(user)
-            post.disLikes = disLikes
+            post.dislikes = disLikes
+            return postRepository.save(post)
         } else if (!likes.contains(user)) {
             likes.add(user)
             post.likes = likes
+            return postRepository.save(post)
         }
-        return postRepository.save(post)
+        return post
     }
 
     fun disLike(id: UUID): Post {
         val post = postRepository.findById(id).get()
         val likes = ArrayList(post.likes)
-        val disLikes = ArrayList(post.disLikes)
         val user = userService.getLoggedInUser()
-        if (likes.contains(user)) {
-            likes.remove(user)
-            post.likes = likes
-        } else if (!disLikes.contains(user)) {
-            disLikes.add(user)
-            post.disLikes = disLikes
+         if (likes.contains(user)) {
+             likes.remove(user)
+             post.likes = likes
+             return postRepository.save(post)
+         }
+        val disLikes = ArrayList(post.dislikes)
+        if (!disLikes.contains(user)) {
+             println(user.getEmail())
+             disLikes.add(user)
+             post.dislikes = disLikes
 
-        }
+         }
         return postRepository.save(post)
     }
 }

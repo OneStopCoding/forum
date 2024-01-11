@@ -61,7 +61,7 @@ type Post{
     author: User!
     comments: [Comment!]!
     likes: [User]!
-    dislikes: [User]
+    dislikes: [User!]
 }
 
 type Comment{
@@ -69,7 +69,6 @@ type Comment{
     text: String!
     post: ID!
     author: User!
-    likes: [User!]!
 }
 
 type Image{
@@ -139,9 +138,9 @@ type Mutation{
     login(username: String!, password: String!): String!
     addPost(postIn: PostIn!): Post!
     addComment(commentIn: CommentIn!): Post!
-    sendDM(dm: DMIn!): Profile
+    sendDM(dm: DMIn!): Profile!
     createProfile(profile: ProfileIn!): Profile!
-    follow(username: String!):Profile
+    follow(username: String!):Profile!
     deleteDM(id: ID!): Boolean!
     deleteComment(id: ID!): Boolean!
     deletePost(id: ID!): Boolean!
@@ -154,13 +153,21 @@ type Mutation{
 type Query{
     helloWorld: String!
     userByUsername(username: String!): User
-    allUsers:[User]!
+    allUsers:[User!]!
     postsForUser(author: String!): [Post]
-    allPosts:[Post]!
-    recentPost(page: Int!, size: Int!): [Post]
-    allProfile:[Profile]!
-    getProfile: Profile
+    allPosts:[Post!]!
+    recentPost(page: Int!, size: Int!): [Post!]!
+    allProfile:[Profile!]!
+    getProfile: Profile!
     getProfileByUsername(username: String!): Profile
     getDM(title: String!):DM!
     getDmForUser: [DM!]
+    allLocations: [Location!]!
+    locationsPerCountry(country: String):[Location!]!
+    locationsPerProvence(provence: String!):[Location!]!
+    locationsPerCity(city: String!):[Location!]!
+    provincesPerCountry(country: String!): [Provence!]!
+    citiesPerProvince(province: String):[City!]!
+    allProvinces: [Provence!]!
+    allCities:[City!]!
 }

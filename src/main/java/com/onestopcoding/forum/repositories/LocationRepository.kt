@@ -7,7 +7,9 @@ import java.util.UUID
 
 @GraphQlRepository
 interface LocationRepository: Neo4jRepository<Location, UUID> {
-    fun getLocationsByCountry_Name(name: String):List<Location>
+    fun getLocationsByCountry_Name(countryName: String):List<Location>
 
-    fun getLocationByCity_Name(name: String): Location
+    fun getLocationsByCity_Name(cityName: String): List<Location>
+
+    fun getLocationsByProvince_Name(provinceName: String):List<Location>
 }

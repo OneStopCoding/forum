@@ -5,7 +5,7 @@ import com.onestopcoding.forum.models.ProfileIn
 import com.onestopcoding.forum.nodes.location.City
 import com.onestopcoding.forum.nodes.location.Country
 import com.onestopcoding.forum.nodes.location.Location
-import com.onestopcoding.forum.nodes.location.Provence
+import com.onestopcoding.forum.nodes.location.Province
 import com.onestopcoding.forum.nodes.user.DM
 import com.onestopcoding.forum.nodes.user.Profile
 import com.onestopcoding.forum.nodes.user.Socials
@@ -23,37 +23,49 @@ open class ProfileService(
 
     fun createProfile(profile: ProfileIn): Profile {
         val user = userService.getLoggedInUser()
-        val profileExists = profileRepository.findProfileByUser_Email(user.getEmail())
-        if (profileExists.user !== user) {
-            val location: Location =
-                locationService.save(Location(
-                        UUID.randomUUID(),
-                        City(profile.location[0]),
-                        Provence(profile.location[1]),
-                        Country(profile.location[2])
-                    )
-                )
-            val socials = Socials(
-                UUID.randomUUID(), profile.socials[0], profile.socials[1], profile.socials[2],
-                profile.socials[3], profile.socials[4]
-            )
+        val socials = Socials(
+            UUID.randomUUID(), profile.socials[0], profile.socials[1], profile.socials[2],
+            profile.socials[3], profile.socials[4]
+        )
+        val location = Location(
+            UUID.randomUUID(),
+            City(profile.location[0]),
+            Province(profile.location[1]),
+            Country(profile.location[2])
+        )
+
+       /* val profileExists = profileRepository.findProfileByUser_Email(user.getEmail())
+        if (profileExists.user.getEmail() === user.getEmail()) {
+            profileExists.firstname = profile.firstname
+            profileExists.lastname = profile.lastname
+            profileExists.profilePic = profile.profilePic
+            profileExists.images = ArrayList(profileExists.images).plus(profile.images)
+            if (profileExists.location.city.name !== profile.location[0] ||
+                profileExists.location.country.name !== profile.location[2]
+            ) {
+                profileExists.location = location
+            }
+            profileExists.socials = socials
+            profileExists.bio = profile.bio
             return profileRepository.save(
-                Profile(
-                    UUID.randomUUID(),
-                    profile.firstname,
-                    profile.lastname,
-                    user,
-                    profile.profilePic,
-                    profile.images,
-                    location,
-                    socials,
-                    profileExists.bio,
-                    mutableListOf(),
-                    mutableListOf()
-                )
+                profileExists
             )
-        }
-        return profileExists
+        } else {*/
+            val created = Profile(
+                UUID.randomUUID(),
+                profile.firstname,
+                profile.lastname,
+                user,
+                profile.profilePic,
+                profile.images,
+                location,
+                socials,
+                profile.bio,
+                mutableListOf(),
+                mutableListOf()
+            )
+            return profileRepository.save(created)
+     //   }
     }
 
     fun getProfile(): Profile {
@@ -95,7 +107,16 @@ open class ProfileService(
         val receiver = userService.findByUsername(message.receiver)
         val profile: Profile = profileRepository.findProfileByUser_Email(receiver.getEmail())
         profile.messages =
-            profile.messages.plus(DM(UUID.randomUUID(), sender, receiver, message.title, message.text, message.images))
+            profile.messages.plus(
+                DM(
+                    UUID.randomUUID(),
+                    sender,
+                    receiver,
+                    message.title,
+                    message.text,
+                    message.images
+                )
+            )
         return profileRepository.save(profile)
 
     }
@@ -108,7 +129,7 @@ open class ProfileService(
         return profileRepository.save(profile)
     }
 
-    fun getAll():List<Profile>{
+    fun getAll(): List<Profile> {
         return profileRepository.findAll()
     }
 

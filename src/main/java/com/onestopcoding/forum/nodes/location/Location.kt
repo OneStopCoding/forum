@@ -11,10 +11,10 @@ data class Location(
     @GeneratedValue(GeneratedValue.UUIDGenerator::class)
     @Id
     val id: UUID,
-    @Relationship(type = "IS_IN", direction = Relationship.Direction.OUTGOING)
+    @Relationship(type = "IS_IN_CITY", direction = Relationship.Direction.OUTGOING)
     val city: City,
-    @Relationship(type = "IS_IN", direction = Relationship.Direction.OUTGOING)
-    val provence: Provence,
-    @Relationship(type = "IS_IN", direction = Relationship.Direction.OUTGOING)
+    @Relationship(type = "IS_IN_PROVINCE", direction = Relationship.Direction.OUTGOING)
+    val province: Province,
+    @Relationship(type = "IS_IN_COUNTRY", direction = Relationship.Direction.OUTGOING)
     val country: Country,
 )
